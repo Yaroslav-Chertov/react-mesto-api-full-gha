@@ -71,14 +71,15 @@ const loginUser = (req, res, next) => {
     .orFail()
     .then((user) => bcrypt.compare(password, user.password).then((match) => {
       if (match) {
+        // const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: '7d',
         });
-        res.cookie('jwtToken', token, {
+        res.cookie('jwt', token, {
           maxAge: 3600,
           httpOnly: true,
         });
-        return res.send({ jwtToken: token });
+        return res.send({ jwt: token });
       }
       throw new Unauthorized('Email или пароль неверные.');
     }))
