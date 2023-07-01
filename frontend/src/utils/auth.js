@@ -24,11 +24,7 @@ export function login(email, password) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-    }).then(getJson)
-    .then((data) => {
-        localStorage.setItem("jwt", data.jwtToken);
-        return data;
-    });
+    }).then(getJson);
 };
 
 export function getUserData(token) {
