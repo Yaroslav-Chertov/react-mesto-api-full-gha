@@ -1,14 +1,15 @@
 class Api {
     constructor(baseUrl, token) {
         this._baseUrl = baseUrl;
-        //this._token = token;
+        this._token = token;
     };
 
     _getHeaders() {
         return {
-            //authorization: this._token,
-            authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            authorization: this._token,
             'content-type': 'application/json',
+            // authorization: `Bearer ${localStorage.getItem('jwt')}`,
+
         };
     };
 
