@@ -69,7 +69,7 @@ const loginUser = (req, res, next) => {
     .orFail()
     .then((user) => bcrypt.compare(password, user.password).then((match) => {
       if (match) {
-        const token = jwt.sign({ _id: user._id }, config.jwtSecretKey, {
+        const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: '7d',
         });
         res.cookie('jwtToken', token, {
