@@ -9,6 +9,8 @@ const Conflict = require('../utils/errors/conflict');
 const NotFound = require('../utils/errors/notFound');
 const Unauthorized = require('../utils/errors/unauthorized');
 
+const { JWT_SECRET = config.jwtSecretKey } = process.env;
+
 const { SUCCESS_STATUS, CREATED_STATUS } = require('../utils/constants');
 
 const formatUser = (user) => ({
