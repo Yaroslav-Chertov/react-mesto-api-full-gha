@@ -62,8 +62,8 @@ function App() {
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
-    if (jwt){
-      Promise.all([api.getCards(),api.getCurrentUser()])
+    if (jwt) {
+      Promise.all([api.getCards(), api.getCurrentUser()])
         .then(([cardData, userData]) => {
           setCards(cardData.reverse());
           setCurrentUser(userData);
@@ -173,15 +173,16 @@ function App() {
       .login(email, password)
       .then((res) => {
         localStorage.setItem("jwt", res.jwt);
-        setUserData(email);
+        setUserData({ email });
         setIsLoggedIn(true);
+        navigate("/");
       })
       .catch((err) => {
+        console.log(err);
         setStatus(false);
         setIsOpenInfoTooltip(true);
-        console.log(err);
       });
-  };
+  }
 
   function registerUser({ email, password }) {
     auth

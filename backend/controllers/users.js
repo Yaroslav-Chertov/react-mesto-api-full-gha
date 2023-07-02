@@ -7,7 +7,7 @@ const User = require('../models/user');
 const BadRequest = require('../utils/errors/badRequest');
 const Conflict = require('../utils/errors/conflict');
 const NotFound = require('../utils/errors/notFound');
-// const Unauthorized = require('../utils/errors/unauthorized');
+const Unauthorized = require('../utils/errors/unauthorized');
 
 // const { JWT_SECRET = config.jwtSecretKey } = process.env;
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -65,40 +65,23 @@ const createUser = (req, res, next) => {
       .catch(next));
 };
 
-// const loginUser = (req, res, next) => {
-//   const { email, password } = req.body;
-//   User.findOne({ email })
-//     .select('+password')
-//     .orFail()
-//     .then((user) => bcrypt.compare(password, user.password).then((match) => {
-//       if (match) {
-//         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-//           expiresIn: '7d',
-//         });
-//         res.cookie('jwtToken', token, {
-//           maxAge: 3600,
-//           httpOnly: true,
-//         });
-//         return res.send({ jwtToken: token });
-//       }
-//       throw new Unauthorized('Email или пароль неверные.');
-//     }))
-//     .catch((err) => {
-//       if (err instanceof Error.DocumentNotFoundError) {
-//         return next(new Unauthorized('Email или пароль неверные.'));
-//       }
-//       return next(err);
-//     });
-// };
-
 const loginUser = (req, res, next) => {
-  User.findOne(req.body.email, req.body.password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.send({ token });
-    })
+  const { email, password } = req.body;
+  User.findOne({ email })
+    .select('+password')
+    .orFail()
+    .then((user) => bcrypt.compare(password, user.password).then((match) => {
+      if (match) {
+        const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+        return res.send({ jwt: token });
+      }
+      throw new Unauthorized('Email или пароль неверные.');
+    }))
     .catch((err) => {
-      next(err);
+      if (err instanceof Error.DocumentNotFoundError) {
+        return next(new Unauthorized('Email или пароль неверные.'));
+      }
+      return next(err);
     });
 };
 

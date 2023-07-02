@@ -20,6 +20,7 @@ const formatCard = (card) => ({
   })),
   _id: card._id,
   name: card.title,
+  // name: card.name,
   link: card.link,
   owner: {
     name: card.owner.name,
@@ -33,18 +34,14 @@ const formatCard = (card) => ({
 const getCards = (req, res, next) => {
   Card.find({})
     .populate(fillOptions)
-    .then((cards) => res.status(SUCCESS_STATUS).send(cards.map(formatCard)))
+    .then((cards) => res.status(SUCCESS_STATUS).send(cards))
     .catch((err) => next(err));
 };
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ title: name, link, owner: req.user._id })
-    .then((card) => res.status(CREATED_STATUS).send({
-      name: card.title,
-      link: card.link,
-      _id: card._id,
-    }))
+    .then((card) => res.status(CREATED_STATUS).send(card))
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         return next(new BadRequest('Некорректные данные при создании карточки.'));

@@ -27,7 +27,7 @@ function Card({ onCardClick, card, onCardLike, onCardDelete }) {
             }
             <img className="element__image" src={card.link} alt={card.name} onClick={handleClickImage} />
             <div className="element__info">
-                <h2 className="element__title">{card.name}</h2>
+                <h2 className="element__title">{card.title}</h2>
                 <div className="element__like-container">
                     <button className={cardLikeButtonClassName} aria-label="поставить лайк" type="button" onClick={handleLikeClick} />
                     <p className="element__like-quantity">{card.likes.length}</p>
