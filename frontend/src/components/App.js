@@ -26,20 +26,51 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isSignIn, setIsSignIn] = useState(true);
+  // const [isSignIn, setIsSignIn] = useState(true);
   const [cards, setCards] = useState([]);
   const navigate = useNavigate();
   const [status, setStatus] = useState(false);
   const [userData, setUserData] = useState({ email: "" });
 
+  // useEffect(() => {
+  //   Promise.all([api.getCurrentUser(), api.getCards()])
+  //     .then(([user, cards]) => {
+  //       setCurrentUser(user);
+  //       setCards(cards);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
+
+  // useEffect(() => {
+  //   const jwt = localStorage.getItem("jwt");
+  //   if (jwt) {
+  //     auth
+  //       .getUserData(jwt)
+  //       .then((res) => {
+  //         if (res) {
+  //           const data = res.data;
+  //           setUserData({ email: data.email });
+  //           setIsLoggedIn(true);
+  //           navigate("/");
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [navigate, isLoggedIn]);
+
   useEffect(() => {
-    Promise.all([api.getCurrentUser(), api.getCards()])
-      .then(([user, cards]) => {
-        setCurrentUser(user);
-        setCards(cards);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    const jwt = localStorage.getItem("jwt");
+    if (jwt){
+      Promise.all([api.getCards(),api.getCurrentUser()])
+        .then(([cardData, userData]) => {
+          setCards(cardData.reverse());
+          setCurrentUser(userData);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -48,17 +79,16 @@ function App() {
         .getUserData(jwt)
         .then((res) => {
           if (res) {
-            const data = res.data;
-            setUserData({ email: data.email });
             setIsLoggedIn(true);
-            navigate("/");
+            setUserData({ ...userData, email: res.email });
+            navigate("/", { replace: true });
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [navigate, isLoggedIn]);
+  }, []);
 
 
   function handleEditAvatarClick() {
@@ -142,7 +172,7 @@ function App() {
     auth
       .login(email, password)
       .then((res) => {
-        localStorage.setItem("jwt", res.token);
+        localStorage.setItem("jwt", res.jwt);
         setUserData(email);
         setIsLoggedIn(true);
       })
@@ -226,9 +256,10 @@ function App() {
         {isLoggedIn && <Footer />}
 
         <InfoTooltip
-          isSignIn={isSignIn}
+          //isSignIn={isSignIn}
           isOpen={isOpenInfoTooltip}
           onClose={closeAllPopups}
+          status={status}
         />
 
         <EditProfilePopup

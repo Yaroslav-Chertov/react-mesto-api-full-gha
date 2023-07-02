@@ -10,7 +10,7 @@ https://yaroslav.student.nomoreparties.sbs/sign-up
 
 ## Ссылки на проект
 
-IP-адрес 51.250.88.158
+IP 51.250.88.158
 
 Frontend https://yaroslav.student.nomoreparties.sbs
 

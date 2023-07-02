@@ -1,13 +1,12 @@
 class Api {
-    constructor(baseUrl) {
+    constructor(baseUrl, token) {
         this._baseUrl = baseUrl;
-        //this._token = token;
+        this._token = token;
     };
 
     _getHeaders() {
         return {
-            //authorization: this._token,
-            authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            authorization: this._token,
             'Content-Type': 'application/json',
 
         };
@@ -77,7 +76,8 @@ class Api {
 };
 
 const api = new Api(
-    'https://yaroslav.student-api.nomoreparties.sbs',
+    //'https://yaroslav.student-api.nomoreparties.sbs',
+    'http://localhost:3000'
 );
 
 export default api;
