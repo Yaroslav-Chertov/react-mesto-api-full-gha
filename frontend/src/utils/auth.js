@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://yaroslav.student-api.nomoreparties.sbs";
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://yaroslav.student-api.nomoreparties.sbs";
+// export const BASE_URL = "http://localhost:3000";
 
 function getJson(res) {
     if (res.ok) {
