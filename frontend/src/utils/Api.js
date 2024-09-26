@@ -75,8 +75,8 @@ class Api {
 };
 
 const api = new Api(
-    'https://yaroslav.student-api.nomoreparties.sbs',
-    // 'http://localhost:3000'
+    // 'https://yaroslav.student-api.nomoreparties.sbs',
+    'http://localhost:3000'
 );
 
 export default api;
